@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  gateway-service:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - book-service
+      - member-service
+
+  book-service:
+    container_name: book-service
+    build: ./book-service
+    depends_on:
+      - app-mysql
+    links:
+      - app-mysql
+
+  member-service:
+    container_name: member-service
+    build: ./member-service
+    depends_on:
+      - app-mongodb
+    links:
+      - app-mongodb
+    environment:
+      - DB_HOST=app-mongodb
+
+  app-mysql:
+    container_name: app-mysql
+    image: mysql:8.0.33
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+    volumes:
+      - app-mysql-vol:/var/lib/mysql
+
+  app-mongodb:
+    container_name: app-mongodb
+    image: mongo:6.0.7-jammy
+    volumes:
+      - app-mongodb-vol:/var/lib/mongodb
+
+
+
+#  issue-service:
+#  auth-mongodb:
+
+
+volumes:
+  app-mysql-vol:
+  app-mongodb-vol:
