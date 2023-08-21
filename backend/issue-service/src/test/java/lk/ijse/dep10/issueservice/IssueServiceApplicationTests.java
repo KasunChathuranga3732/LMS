@@ -1,0 +1,13 @@
+package lk.ijse.dep10.issueservice;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class IssueServiceApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
