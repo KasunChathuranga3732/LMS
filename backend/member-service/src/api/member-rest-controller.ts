@@ -39,7 +39,7 @@ router.post('/',memberValidator, async (req, res) => {
     }
 
     await saveMember(req.body);
-    res.sendStatus(201);
+    res.sendStatus(204);
 });
 
 

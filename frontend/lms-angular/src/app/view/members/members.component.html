@@ -68,7 +68,10 @@
       <div class="modal-body text-center">
         <div class="mb-3">
           <label for="txt-id" class="form-label">Member ID</label>
-          <input #txtId type="text" class="form-control text-center" id="txt-id" placeholder="Generated ID" disabled>
+          <input #txtId type="text" class="form-control text-center" id="txt-id" placeholder="Generated ID">
+          <div class="invalid-feedback">
+            Id can't be empty
+          </div>
         </div>
         <div class="mb-3">
           <label for="txt-name" class="form-label">Member Name</label>

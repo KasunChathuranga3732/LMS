@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import * as $ from 'jquery';
 import {Member} from "../../dto/member";
 import {HttpClient} from "@angular/common/http";
+import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-members',
@@ -21,7 +22,7 @@ export class MembersComponent {
     // $('#new-customer-modal').removeClass('fade');
     $('#new-customer-modal').trigger
     this.resetForm(txtId, txtName, txtContact, txtAddress, true);
-    setTimeout(()=>txtName.focus(),500)
+    setTimeout(()=>txtId.focus(),500);
   }
 
   resetForm(txtId:HTMLInputElement, txtName:HTMLInputElement, txtContact:HTMLInputElement, txtAddress:HTMLInputElement, flag:boolean){
@@ -46,15 +47,16 @@ export class MembersComponent {
     const address = txtAddress.value;
     const contact = txtContact.value;
 
-    if(!this.validateData(txtId, txtName, txtContact, txtAddress)){
+    if (!this.validateData(txtId, txtName, txtContact, txtAddress)) {
       return;
     }
-    alert("okay");
+
 
 
   }
 
   validateData(txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement){
+    const id = txtId.value.trim();
     const name = txtName.value.trim();
     const address = txtAddress.value.trim();
     const contact = txtContact.value.trim();
@@ -81,6 +83,14 @@ export class MembersComponent {
     } else if(!/^[A-za-z ]+$/.test(name)){
       valid = this.invalidate(txtName, "Invalid name")
     }
+
+    if(!id){
+      valid = this.invalidate(txtId, "ID can't be empty")
+
+    } else if(!/^\d{9}[Vv]$/.test(id)){
+      valid = this.invalidate(txtId, "Invalid ID")
+    }
+
     return valid;
   }
 
