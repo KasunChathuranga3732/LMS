@@ -51,6 +51,14 @@ export class MembersComponent {
       return;
     }
 
+    const member = new Member(id, name, address, contact);
+
+    this.http.post('http://localhost:8080/api/v1/members', member)
+      .subscribe(result =>{
+        this.memberList.push(member);
+        this.resetForm(txtId, txtName, txtContact, txtAddress, true);
+        txtId.focus();
+      })
 
 
   }
