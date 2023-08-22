@@ -20,7 +20,7 @@
       </thead>
       <tbody *ngFor="let member of memberList">
       <tr>
-        <td class="text-center">{{member.id}}</td>
+        <td class="text-center">{{member._id}}</td>
         <td>{{member.name}}</td>
         <td class="d-none d-xl-table-cell">{{member.address}}</td>
         <td class="contact text-center">{{member.contact}}</td>
@@ -35,7 +35,7 @@
                       d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
               </svg>
             </div>
-            <div (click)="deleteMember(member.id)" title="Delete Member">
+            <div (click)="deleteMember(member._id)" title="Delete Member">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                    class="bi bi-trash" viewBox="0 0 16 16">
                 <path
@@ -49,7 +49,7 @@
       </tr>
       </tbody>
       <tfoot>
-      <tr>
+      <tr *ngIf="!memberList" >
         <td class="text-center" colspan="5">No customer records are found!</td>
       </tr>
       </tfoot>

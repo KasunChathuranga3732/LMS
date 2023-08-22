@@ -12,7 +12,7 @@ export class MembersComponent {
   memberList: Array<Member> = [];
 
   constructor(private http:HttpClient) {
-    http.get<Array<Member>>('https://localhost:8080/api/v1/members')
+    http.get<Array<Member>>('http://localhost:8080/api/v1/members')
       .subscribe(memberList => this.memberList = memberList);
   }
 
@@ -32,10 +32,10 @@ export class MembersComponent {
   }
 
 
-  deleteMember(id: number | null) {
+  deleteMember(id: string | null) {
     this.http.delete(`http://localhost:8080/api/v1/members/${id}`)
       .subscribe(result => {
-        const index = this.memberList.findIndex(member => member.id == id);
+        const index = this.memberList.findIndex(member => member._id == id);
         this.memberList.splice(index, 1);
       })
   }
@@ -45,7 +45,11 @@ export class MembersComponent {
     const name = txtName.value;
     const address = txtAddress.value;
     const contact = txtContact.value;
-    this.validateData(txtId, txtName, txtContact, txtAddress);
+
+    if(!this.validateData(txtId, txtName, txtContact, txtAddress)){
+      return;
+    }
+    alert("okay");
 
 
   }

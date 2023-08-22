@@ -1,4 +1,4 @@
 export class Member {
-  constructor(public id:number|null, public name:string, public contact:string, public address:string) {
+  constructor(public _id:string|null, public name:string, public contact:string, public address:string) {
   }
 }
