@@ -12,6 +12,8 @@ export class MembersComponent {
   memberList: Array<Member> = [];
 
   constructor(private http:HttpClient) {
+    http.get<Array<Member>>('https://localhost:8080/api/v1/members')
+      .subscribe(memberList => this.memberList = memberList);
   }
 
 
