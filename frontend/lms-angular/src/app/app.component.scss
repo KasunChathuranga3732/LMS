@@ -7,8 +7,16 @@
   font-size: 1.5rem;
   padding: 5px;
   margin-left: 10px;
+  transition-duration: 300ms;
+  transition-property: all;
+}
+
+#menu .btn:hover {
+  scale: 1.1;
+
 }
 
 .active{
-  background-color: orange;
+  color: black;
+  background-color: #dce777;
 }

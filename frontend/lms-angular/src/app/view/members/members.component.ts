@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import * as $ from 'jquery';
 import {Member} from "../../dto/member";
 import {HttpClient} from "@angular/common/http";
-import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-members',
@@ -11,9 +10,11 @@ import {timeout} from "rxjs";
 })
 export class MembersComponent {
   memberList: Array<Member> = [];
+  btnText: string = 'Save Member';
+  API_BASE_URL: string = 'http://localhost:8080/api/v1/members';
 
   constructor(private http:HttpClient) {
-    http.get<Array<Member>>('http://localhost:8080/api/v1/members')
+    http.get<Array<Member>>(`${this.API_BASE_URL}`)
       .subscribe(memberList => this.memberList = memberList);
   }
 
@@ -21,6 +22,8 @@ export class MembersComponent {
   newMember(txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement) {
     // $('#new-customer-modal').removeClass('fade');
     $('#new-customer-modal').trigger
+    this.btnText = 'Save Member';
+    txtId.removeAttribute('disabled');
     this.resetForm(txtId, txtName, txtContact, txtAddress, true);
     setTimeout(()=>txtId.focus(),500);
   }
@@ -34,7 +37,7 @@ export class MembersComponent {
 
 
   deleteMember(id: string | null) {
-    this.http.delete(`http://localhost:8080/api/v1/members/${id}`)
+    this.http.delete(`${this.API_BASE_URL}/${id}`)
       .subscribe(result => {
         const index = this.memberList.findIndex(member => member._id == id);
         this.memberList.splice(index, 1);
@@ -53,12 +56,22 @@ export class MembersComponent {
 
     const member = new Member(id, name, address, contact);
 
-    this.http.post('http://localhost:8080/api/v1/members', member)
-      .subscribe(result =>{
-        this.memberList.push(member);
-        this.resetForm(txtId, txtName, txtContact, txtAddress, true);
-        txtId.focus();
-      })
+    if(this.btnText === 'Save Member'){
+      this.http.post(`${this.API_BASE_URL}`, member)
+        .subscribe(result =>{
+          this.memberList.push(member);
+          this.resetForm(txtId, txtName, txtContact, txtAddress, true);
+          txtId.focus();
+        })
+    } else {
+      this.http.patch(`${this.API_BASE_URL}/${id}`, member)
+        .subscribe(result => {
+          const index = this.memberList.findIndex(member => member._id == id);
+          this.memberList.splice(index, 1, member);
+          // $('btnClose').trigger;
+        })
+    }
+
 
 
   }
@@ -108,5 +121,17 @@ export class MembersComponent {
     txt.select();
     $(txt).next().text(msg);
     return false;
+  }
+
+  updateMember(member: Member, txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement) {
+    // $('new-member-modal').removeClass('fade');
+    $('btn-new-member').trigger;
+    txtId.value = member._id;
+    txtName.value = member.name;
+    txtContact.value = member.contact;
+    txtAddress.value = member.address;
+    txtId.setAttribute('disabled', 'true');
+    setTimeout(()=>txtName.focus(),500);
+    this.btnText = 'Update Member';
   }
 }
