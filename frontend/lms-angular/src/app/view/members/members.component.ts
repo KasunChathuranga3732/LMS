@@ -68,12 +68,9 @@ export class MembersComponent {
         .subscribe(result => {
           const index = this.memberList.findIndex(member => member._id == id);
           this.memberList.splice(index, 1, member);
-          // $('btnClose').trigger;
+          this.newMember(txtId, txtName, txtContact, txtAddress);
         })
     }
-
-
-
   }
 
   validateData(txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement){
@@ -133,5 +130,12 @@ export class MembersComponent {
     txtId.setAttribute('disabled', 'true');
     setTimeout(()=>txtName.focus(),500);
     this.btnText = 'Update Member';
+  }
+
+  getMembers(txtSearch: HTMLInputElement) {
+    const searchText = txtSearch.value.trim();
+    const query = (searchText) ? `?q=${searchText}`: "";
+    this.http.get<Array<Member>>(`${this.API_BASE_URL}` + query)
+      .subscribe(memberList => this.memberList = memberList);
   }
 }

@@ -5,7 +5,7 @@
             data-bs-target="#new-member-modal" (click)="newMember(txtId, txtName, txtContact, txtAddress)">New Member</button>
   </section>
   <section class="p-2">
-    <input id="txt-search" class="form-control text-center" type="text" placeholder="Search Member">
+    <input #txtSearch id="txt-search" class="form-control text-center" type="text" (input)="getMembers(txtSearch)" placeholder="Search Member">
   </section>
   <section class="p-2">
     <table id="tbl-customers" class="table table-striped table-hover table-bordered">
