@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -20,7 +21,7 @@ public class BookDTO implements Serializable {
     @NotBlank(message = "Title can't be empty")
     private String title;
     @NotBlank(message = "Author can't be empty")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid author name")
+    @Length(min = 3, message = "Invalid author name")
     private String author;
 //    @NotBlank(message = "Copies can't be null")
     @PositiveOrZero(message = "Copies can't be negative")

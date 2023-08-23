@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import * as $ from 'jquery';
-import {Member} from "../../dto/member";
+import {Book} from "../../dto/member";
 import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 
@@ -10,12 +10,12 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./members.component.scss']
 })
 export class MembersComponent {
-  memberList: Array<Member> = [];
+  memberList: Array<Book> = [];
   btnText: string = 'Save Member';
   API_BASE_URL: string = 'http://localhost:8080/api/v1/members';
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
-    http.get<Array<Member>>(`${this.API_BASE_URL}`)
+    http.get<Array<Book>>(`${this.API_BASE_URL}`)
       .subscribe(memberList => {
         this.memberList = memberList
       }, (err) => {
@@ -62,7 +62,7 @@ export class MembersComponent {
       return;
     }
 
-    const member = new Member(id, name, address, contact);
+    const member = new Book(id, name, address, contact);
 
     if(this.btnText === 'Save Member'){
       this.http.post(`${this.API_BASE_URL}`, member)
@@ -134,7 +134,7 @@ export class MembersComponent {
     return false;
   }
 
-  updateMember(member: Member, txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement) {
+  updateMember(member: Book, txtId: HTMLInputElement, txtName: HTMLInputElement, txtContact: HTMLInputElement, txtAddress: HTMLInputElement) {
     // $('new-member-modal').removeClass('fade');
     $('btn-new-member').trigger;
     txtId.value = member._id;
@@ -149,7 +149,7 @@ export class MembersComponent {
   getMembers(txtSearch: HTMLInputElement) {
     const searchText = txtSearch.value.trim();
     const query = (searchText) ? `?q=${searchText}`: "";
-    this.http.get<Array<Member>>(`${this.API_BASE_URL}` + query)
+    this.http.get<Array<Book>>(`${this.API_BASE_URL}` + query)
       .subscribe(memberList => {
         this.memberList = memberList
       }, (err) => {

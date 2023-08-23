@@ -1,6 +1,6 @@
-<div>
+<div id="top-menu">
   <h1 class="text-center">Library Management System</h1>
-  <div id="menu" class="d-flex justify-content-between">
+  <div id="menu" class="d-flex justify-content-between border-bottom">
     <nav class="p-1">
       <button routerLinkActive="active" class="btn btn-primary" routerLink="/home">Dashboard</button>
       <button routerLinkActive="active" class="btn btn-primary" routerLink="/members">Members</button>
@@ -12,5 +12,6 @@
     </div>
   </div>
 </div>
-
-<router-outlet></router-outlet>
+<div id="content">
+  <router-outlet></router-outlet>
+</div>

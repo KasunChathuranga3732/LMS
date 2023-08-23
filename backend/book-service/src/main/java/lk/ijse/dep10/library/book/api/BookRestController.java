@@ -44,7 +44,7 @@ public class BookRestController {
     }
 
     @GetMapping
-    public List<BookDTO> findBooks(@RequestParam(required = false) String query){
+    public List<BookDTO> findBooks(@RequestParam(required = false, name = "q") String query){
         if(query == null) query = "";
         return bookService.findBooks(query);
     }
