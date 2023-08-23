@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import * as $ from 'jquery';
 import {Member} from "../../dto/member";
 import {HttpClient} from "@angular/common/http";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-members',
@@ -13,9 +14,13 @@ export class MembersComponent {
   btnText: string = 'Save Member';
   API_BASE_URL: string = 'http://localhost:8080/api/v1/members';
 
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient, private toastr: ToastrService) {
     http.get<Array<Member>>(`${this.API_BASE_URL}`)
-      .subscribe(memberList => this.memberList = memberList);
+      .subscribe(memberList => {
+        this.memberList = memberList
+      }, (err) => {
+        this.toastr.error("Can't fetch members: "+err.statusText, 'Error');
+      });
   }
 
 
@@ -39,8 +44,11 @@ export class MembersComponent {
   deleteMember(id: string | null) {
     this.http.delete(`${this.API_BASE_URL}/${id}`)
       .subscribe(result => {
+        this.toastr.success('Successfully delete the member', 'Success');
         const index = this.memberList.findIndex(member => member._id == id);
         this.memberList.splice(index, 1);
+      }, (err) => {
+        this.toastr.error(err.error, 'Error');
       })
   }
 
@@ -59,17 +67,23 @@ export class MembersComponent {
     if(this.btnText === 'Save Member'){
       this.http.post(`${this.API_BASE_URL}`, member)
         .subscribe(result =>{
+          this.toastr.success('Successfully save the member', 'Success');
           this.memberList.push(member);
           this.resetForm(txtId, txtName, txtContact, txtAddress, true);
           txtId.focus();
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
         })
     } else {
       this.http.patch(`${this.API_BASE_URL}/${id}`, member)
-        .subscribe(result => {
+        .subscribe((result) => {
+          this.toastr.success('Successfully update the member', 'Success');
           const index = this.memberList.findIndex(member => member._id == id);
           this.memberList.splice(index, 1, member);
           this.newMember(txtId, txtName, txtContact, txtAddress);
-        })
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
+        });
     }
   }
 
@@ -136,6 +150,11 @@ export class MembersComponent {
     const searchText = txtSearch.value.trim();
     const query = (searchText) ? `?q=${searchText}`: "";
     this.http.get<Array<Member>>(`${this.API_BASE_URL}` + query)
-      .subscribe(memberList => this.memberList = memberList);
+      .subscribe(memberList => {
+        this.memberList = memberList
+      }, (err) => {
+        this.toastr.error("Can't fetch members: "+err.statusText, 'Error');
+      });
+
   }
 }

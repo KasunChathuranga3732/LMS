@@ -8,6 +8,8 @@ import { IssueComponent } from './view/issue/issue.component';
 import { HomeComponent } from './view/home/home.component';
 import {RouterModule, Routes} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 const route:Routes = [
@@ -41,7 +43,9 @@ const route:Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(route),
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
