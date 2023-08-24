@@ -41,7 +41,7 @@
                 data-bs-target="#new-member-modal">New Book</button>
       </section>
       <section class="p-2">
-        <input #txtSearch id="txt-search" class="form-control text-center" type="text" placeholder="Search Books">
+        <input #txtSearch id="txt-search" class="form-control text-center" type="text" (input)="getBooks(txtSearch)" placeholder="Search Books">
       </section>
       <section class="p-2">
         <table id="tbl-customers" class="table table-striped table-hover table-bordered">
@@ -55,11 +55,11 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td class="text-center">1234567891234</td>
-            <td>Harry Potter</td>
-            <td class="d-none d-xl-table-cell">J.K. Rowling</td>
-            <td class="contact text-center">55</td>
+          <tr *ngFor="let book of bookList">
+            <td class="text-center">{{book.isbn}}</td>
+            <td>{{book.title}}</td>
+            <td class="d-none d-xl-table-cell">{{book.author}}</td>
+            <td class="contact text-center">{{book.copies}}</td>
             <td>
               <div class="actions d-flex gap-3 justify-content-center">
                 <div data-bs-toggle="modal" data-bs-target="#new-member-modal" title="Update Book">
