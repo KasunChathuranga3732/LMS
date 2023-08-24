@@ -21,4 +21,15 @@ export class BooksComponent {
         this.toastr.error("Can't fetch books: "+err.statusText, 'Error');
       });
   }
+
+  getBooks(txtSearch: HTMLInputElement) {
+    const searchText = txtSearch.value.trim();
+    const query = (searchText) ? `?q=${searchText}`: "";
+    this.http.get<Array<Book>>(`${this.API_BASE_URL}` + query)
+      .subscribe(bookList => {
+        this.bookList = bookList
+      }, (err) => {
+        this.toastr.error("Can't fetch books: "+err.statusText, 'Error');
+      });
+  }
 }
