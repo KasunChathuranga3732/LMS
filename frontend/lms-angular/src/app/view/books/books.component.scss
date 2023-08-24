@@ -1,0 +1,61 @@
+main {
+  width: 100vw;
+}
+
+#section1 {
+  width: 75%;
+}
+
+.book-images-container {
+  width: 12.5%;
+  height: 83.5vh;
+  background-color: rgba(245, 245, 239, 0.86);
+}
+
+#tbl-customers thead tr th:first-child,
+#tbl-customers thead tr td:first-child{
+  width: 150px;
+}
+
+#tbl-customers thead tr th:last-child,
+#tbl-customers thead tr td:last-child{
+  width: 100px;
+}
+
+#tbl-customers thead tr th:nth-child(4),
+#tbl-customers thead tr td:nth-child(4){
+  width: 120px;
+}
+
+.contact {
+  min-width: 110px;
+  word-wrap: break-word;
+}
+
+#tbl-customers tbody tr {
+  cursor: pointer;
+}
+
+.actions div:first-child svg:hover {
+  fill: green;
+}
+
+.actions div:last-child svg:hover {
+  fill: red;
+}
+
+.image-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.book-image {
+  height: 50%;
+  width: 100%;
+}
+
+.image {
+  height: 250px;
+  width: 100%;
+}
