@@ -38,7 +38,7 @@
       <section class="d-flex justify-content-between border-bottom p-2">
         <h2 class="m-0 align-self-center">Manage Books</h2>
         <button id="btn-new-member" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#new-member-modal">New Book</button>
+                data-bs-target="#new-member-modal" (click)="newBook(txtIsbn, txtTitle, txtAuthor, txtCopies)">New Book</button>
       </section>
       <section class="p-2">
         <input #txtSearch id="txt-search" class="form-control text-center" type="text" (input)="getBooks(txtSearch)" placeholder="Search Books">
@@ -85,7 +85,7 @@
           </tr>
           </tbody>
           <tfoot>
-          <tr>
+          <tr *ngIf="!bookList">
             <td class="text-center" colspan="5">No book records are found!</td>
           </tr>
           </tfoot>
@@ -140,28 +140,28 @@
       <div class="modal-body text-center">
         <div class="mb-3">
           <label for="txt-id" class="form-label">ISBN</label>
-          <input #isbn type="text" class="form-control text-center" id="txt-id" placeholder="Eg. 1628028360482">
+          <input #txtIsbn type="text" [(ngModel)]="isbn" class="form-control text-center" id="txt-id" placeholder="Eg. 1628028360482">
           <div class="invalid-feedback">
             Isbn can't be empty
           </div>
         </div>
         <div class="mb-3">
           <label for="txt-name" class="form-label">Book Title</label>
-          <input #title type="text" class="form-control text-center" id="txt-name" placeholder="Eg. Harry Potter">
+          <input #txtTitle type="text" [(ngModel)]="title" class="form-control text-center" id="txt-name" placeholder="Eg. Harry Potter">
           <div class="invalid-feedback">
             Title can't be empty
           </div>
         </div>
         <div class="mb-3">
           <label for="txt-contact" class="form-label">Author</label>
-          <input #author type="text" class="form-control text-center" id="txt-contact" placeholder="Eg. J.K. Rowling">
+          <input #txtAuthor type="text" [(ngModel)]="author" class="form-control text-center" id="txt-contact" placeholder="Eg. J.K. Rowling">
           <div class="invalid-feedback">
             Author can't be empty
           </div>
         </div>
         <div class="mb-3">
           <label for="txt-address" class="form-label">Number of Copies</label>
-          <input #copies type="text" class="form-control text-center" id="txt-address" placeholder="Eg. 30">
+          <input #txtCopies type="text" [(ngModel)]="copies" class="form-control text-center" id="txt-address" placeholder="Eg. 30">
           <div class="invalid-feedback">
             Copies can't be empty
           </div>
@@ -171,7 +171,7 @@
         <div id="loader">
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
-        <button id="btn-save" type="button" class="btn btn-primary"
+        <button id="btn-save" type="button" class="btn btn-primary" (click)="saveBook(txtIsbn, txtTitle, txtAuthor, txtCopies)"
         >Save Book</button>
       </div>
     </div>

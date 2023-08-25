@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Book} from "../../dto/book";
 import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-books',
@@ -12,6 +13,10 @@ export class BooksComponent {
   bookList: Array<Book> = [];
   btnText: string = 'Save Book';
   API_BASE_URL: string = 'http://localhost:8080/api/v1/books';
+  isbn: string = '';
+  title: string = '';
+  author: string = '';
+  copies: string = '0';
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
     http.get<Array<Book>>(`${this.API_BASE_URL}`)
@@ -31,5 +36,27 @@ export class BooksComponent {
       }, (err) => {
         this.toastr.error("Can't fetch books: "+err.statusText, 'Error');
       });
+  }
+
+  saveBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
+           txtCopies: HTMLInputElement) {
+
+  }
+
+  newBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
+          txtCopies: HTMLInputElement) {
+    $('#new-customer-modal').trigger;
+    this.btnText = 'Save Book';
+    txtIsbn.removeAttribute('disabled');
+    this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
+    setTimeout(()=>txtIsbn.focus(),500);
+  }
+
+  private resetForm(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
+                    txtCopies: HTMLInputElement, flag: boolean) {
+    [txtIsbn, txtTitle, txtAuthor, txtCopies].forEach(txt => {
+      txt.classList.remove('is-invalid', 'animate__shakeX')
+      if(flag) txt.value = '';
+    })
   }
 }
