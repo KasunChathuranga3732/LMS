@@ -60,6 +60,20 @@ export class BooksComponent {
     if(!this.validateData(txtIsbn, txtTitle, txtAuthor, txtCopies)){
       return;
     }
+
+    const book = new Book(this.isbn, this.title, this.author, +this.copies);
+
+    if(this.btnText === 'Save Book'){
+      this.http.post(`${this.API_BASE_URL}`, book)
+        .subscribe(result =>{
+          this.toastr.success('Successfully save the book', 'Success');
+          this.bookList.push(book);
+          this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
+          txtIsbn.focus();
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
+        })
+    }
   }
 
   private validateData(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
