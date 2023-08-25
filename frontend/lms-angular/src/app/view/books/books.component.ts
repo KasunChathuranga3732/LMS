@@ -16,7 +16,7 @@ export class BooksComponent {
   isbn: string = '';
   title: string = '';
   author: string = '';
-  copies: string = '0';
+  copies: string = '';
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
     http.get<Array<Book>>(`${this.API_BASE_URL}`)
@@ -38,11 +38,6 @@ export class BooksComponent {
       });
   }
 
-  saveBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
-           txtCopies: HTMLInputElement) {
-
-  }
-
   newBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
           txtCopies: HTMLInputElement) {
     $('#new-customer-modal').trigger;
@@ -58,5 +53,46 @@ export class BooksComponent {
       txt.classList.remove('is-invalid', 'animate__shakeX')
       if(flag) txt.value = '';
     })
+  }
+
+  saveBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
+           txtCopies: HTMLInputElement) {
+    if(!this.validateData(txtIsbn, txtTitle, txtAuthor, txtCopies)){
+      return;
+    }
+  }
+
+  private validateData(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
+                       txtCopies: HTMLInputElement) {
+    let valid = true;
+    this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, false);
+
+    if(!this.copies){
+      valid = this.invalidate(txtCopies, "Copies can't be empty");
+    } else if(!/^\d+$/.test(this.copies)){
+      valid = this.invalidate(txtCopies, "Copies should be positive integer");
+    }
+    if(!this.author){
+      valid = this.invalidate(txtAuthor, "Author can't be empty");
+    }
+
+    if(!this.title){
+      valid = this.invalidate(txtTitle, "Title can't be empty");
+    }
+
+    if(!this.isbn){
+      valid = this.invalidate(txtIsbn, "ISBN can't be empty");
+    } else if(!/^\d{13}$/.test(this.isbn)){
+      valid = this.invalidate(txtIsbn, "Invalid isbn");
+    }
+
+    return valid;
+  }
+
+  private invalidate(txt: HTMLInputElement, msg: string) {
+    setTimeout(()=>txt.classList.add('is-invalid', 'animate__shakeX'),0);
+    txt.select();
+    $(txt).next().text(msg);
+    return false;
   }
 }
