@@ -134,4 +134,15 @@ export class BooksComponent {
     txtIsbn.setAttribute('disabled', 'true');
     setTimeout(()=>txtTitle.focus(),500);
   }
+
+  deleteBook(isbn: string) {
+    this.http.delete(`${this.API_BASE_URL}/${isbn}`)
+      .subscribe(result => {
+        this.toastr.success('Successfully delete the book', 'Success');
+        const index = this.bookList.findIndex(book => book.isbn == isbn);
+        this.bookList.splice(index, 1);
+      }, (err) => {
+        this.toastr.error(err.error, 'Error');
+      })
+  }
 }
