@@ -12,6 +12,11 @@ main {
   background-color: rgba(245, 245, 239, 0.86);
 }
 
+.book-table-wrapper {
+  max-height: 65vh;
+  overflow-y: scroll;
+}
+
 #tbl-customers thead tr th:first-child,
 #tbl-customers thead tr td:first-child{
   width: 150px;
