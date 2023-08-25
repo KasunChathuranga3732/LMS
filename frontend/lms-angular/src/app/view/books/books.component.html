@@ -37,8 +37,8 @@
     <section id="section1">
       <section class="d-flex justify-content-between border-bottom p-2">
         <h2 class="m-0 align-self-center">Manage Books</h2>
-        <button id="btn-new-member" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#new-member-modal" (click)="newBook(txtIsbn, txtTitle, txtAuthor, txtCopies)">New Book</button>
+        <button id="btn-new-book" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#new-book-modal" (click)="newBook(txtIsbn, txtTitle, txtAuthor, txtCopies)">New Book</button>
       </section>
       <section class="p-2">
         <input #txtSearch id="txt-search" class="form-control text-center" type="text" (input)="getBooks(txtSearch)" placeholder="Search Books">
@@ -62,7 +62,8 @@
             <td class="contact text-center">{{book.copies}}</td>
             <td>
               <div class="actions d-flex gap-3 justify-content-center">
-                <div data-bs-toggle="modal" data-bs-target="#new-member-modal" title="Update Book">
+                <div  (click)="updateBook(book, txtIsbn, txtTitle, txtAuthor, txtCopies)"
+                      data-bs-toggle="modal" data-bs-target="#new-book-modal" title="Update Book">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                        class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path
@@ -129,12 +130,12 @@
   </div>
 </main>
 <!-- Modal -->
-<div class="modal fade" id="new-member-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="new-book-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">Add New Book</h1>
+        <h1 class="modal-title fs-5">{{modelTitle}}</h1>
         <button id="btnClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
@@ -172,18 +173,8 @@
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
         <button id="btn-save" type="button" class="btn btn-primary" (click)="saveBook(txtIsbn, txtTitle, txtAuthor, txtCopies)"
-        >Save Book</button>
+        >{{btnText}}</button>
       </div>
-    </div>
-  </div>
-</div>
-<div id="toast" class="toast-container position-fixed p-3 bottom-0 start-50 translate-middle-x">
-  <div id="liveToast" class="toast" data-bs-autohide="true" data-bs-delay='2000' role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <strong class="me-auto"></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
     </div>
   </div>
 </div>

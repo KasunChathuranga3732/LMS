@@ -12,6 +12,7 @@ import {ToastrService} from "ngx-toastr";
 export class MembersComponent {
   memberList: Array<Book> = [];
   btnText: string = 'Save Member';
+  modelTitle: string = 'Add New Member';
   API_BASE_URL: string = 'http://localhost:8080/api/v1/members';
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
@@ -28,6 +29,7 @@ export class MembersComponent {
     // $('#new-customer-modal').removeClass('fade');
     $('#new-customer-modal').trigger
     this.btnText = 'Save Member';
+    this.modelTitle = 'Add New Member';
     txtId.removeAttribute('disabled');
     this.resetForm(txtId, txtName, txtContact, txtAddress, true);
     setTimeout(()=>txtId.focus(),500);
@@ -141,9 +143,10 @@ export class MembersComponent {
     txtName.value = member.name;
     txtContact.value = member.contact;
     txtAddress.value = member.address;
+    this.btnText = 'Update Member';
+    this.modelTitle = 'Update the Member';
     txtId.setAttribute('disabled', 'true');
     setTimeout(()=>txtName.focus(),500);
-    this.btnText = 'Update Member';
   }
 
   getMembers(txtSearch: HTMLInputElement) {

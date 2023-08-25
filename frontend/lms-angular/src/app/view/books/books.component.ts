@@ -12,6 +12,7 @@ import * as $ from "jquery";
 export class BooksComponent {
   bookList: Array<Book> = [];
   btnText: string = 'Save Book';
+  modelTitle: string = 'Add New Book';
   API_BASE_URL: string = 'http://localhost:8080/api/v1/books';
   isbn: string = '';
   title: string = '';
@@ -40,8 +41,9 @@ export class BooksComponent {
 
   newBook(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
           txtCopies: HTMLInputElement) {
-    $('#new-customer-modal').trigger;
+    $('#new-book-modal').trigger;
     this.btnText = 'Save Book';
+    this.modelTitle = 'Add New Book';
     txtIsbn.removeAttribute('disabled');
     this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
     setTimeout(()=>txtIsbn.focus(),500);
@@ -73,6 +75,16 @@ export class BooksComponent {
         }, (err) => {
           this.toastr.error(err.error, 'Error');
         })
+    } else {
+      this.http.patch(`${this.API_BASE_URL}/${this.isbn}`, book)
+        .subscribe((result) => {
+          this.toastr.success('Successfully update the book', 'Success');
+          const index = this.bookList.findIndex(book => book.isbn == this.isbn);
+          this.bookList.splice(index, 1, book);
+          this.newBook(txtIsbn, txtTitle, txtAuthor, txtCopies);
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
+        });
     }
   }
 
@@ -108,5 +120,18 @@ export class BooksComponent {
     txt.select();
     $(txt).next().text(msg);
     return false;
+  }
+
+  updateBook(book: Book, txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement, txtCopies: HTMLInputElement) {
+    $('btn-new-book').trigger;
+    this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
+    this.isbn = book.isbn;
+    this.title = book.title;
+    this.author = book.author;
+    this.copies = ''+book.copies;
+    this.btnText = 'Update Book';
+    this.modelTitle = 'Update the Book';
+    txtIsbn.setAttribute('disabled', 'true');
+    setTimeout(()=>txtTitle.focus(),500);
   }
 }
