@@ -1,6 +1,6 @@
 package lk.ijse.dep10.issueservice.dto;
 
-import lk.ijse.dep10.issueservice.util.Flag;
+import lk.ijse.dep10.issueservice.util.Returned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +28,5 @@ public class IssueDTO implements Serializable {
     @NotBlank(message = "Fine can't be empty")
     private double fine;
     @NotBlank(message = "Returned should be Yes or No")
-    private Flag returned;
+    private Returned returned;
 }

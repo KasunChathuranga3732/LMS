@@ -1,6 +1,6 @@
 package lk.ijse.dep10.issueservice.entity;
 
-import lk.ijse.dep10.issueservice.util.Flag;
+import lk.ijse.dep10.issueservice.util.Returned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +30,6 @@ public class Issue {
     @Column(nullable = false)
     private double fine;
     @Column(nullable = false)
-    private Flag returned;
+    @Enumerated(EnumType.STRING)
+    private Returned returned;
 }
