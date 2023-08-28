@@ -57,12 +57,27 @@ public class IssueServiceImpl implements IssueService {
             }
         }
 
-        issueRepository.save(mapper.map(issue, Issue.class));
+        try{
+            issueRepository.save(mapper.map(issue, Issue.class));
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Internal Server Error");
+        }
     }
 
     @Override
     public void updateIssue(IssueDTO issue) {
+        if(issueRepository.existsById(issue.getId())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "The issue: " + issue.getId() + " does not exist");
+        }
 
+        try{
+            issueRepository.save(mapper.map(issue, Issue.class));
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Internal Server Error");
+        }
     }
 
     @Override
