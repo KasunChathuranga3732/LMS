@@ -1,6 +1,9 @@
 package lk.ijse.dep10.issueservice.api;
 
+import lk.ijse.dep10.issueservice.dto.IssueDTO;
+import lk.ijse.dep10.issueservice.service.IssueService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -8,9 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class IssueRestController {
 
+    private final IssueService issueService;
+
+    public IssueRestController(IssueService issueService) {
+        this.issueService = issueService;
+    }
+
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public String saveIssue(){
+    public String saveIssue(@RequestBody @Validated IssueDTO issueDTO){
+        issueService.saveIssue(issueDTO);
         return "<h1>Save Issue</h1>";
     }
 
