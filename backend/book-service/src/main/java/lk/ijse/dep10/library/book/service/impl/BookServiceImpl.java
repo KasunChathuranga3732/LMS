@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -19,10 +20,12 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final ModelMapper mapper;
+    private final RestTemplate restTemplate;
 
-    public BookServiceImpl(BookRepository bookRepository, ModelMapper mapper) {
+    public BookServiceImpl(BookRepository bookRepository, ModelMapper mapper, RestTemplate restTemplate) {
         this.bookRepository = bookRepository;
         this.mapper = mapper;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -61,12 +64,21 @@ public class BookServiceImpl implements BookService {
                     "The isbn: " + isbn+ " does not exist");
         }
         /* Todo: Check whether the book has been issued*/
-
-        try {
-            bookRepository.deleteById(isbn);
+        String result;
+        try{
+            result = restTemplate.getForObject("http://localhost:8080/api/v1/issues/book/" + isbn, String.class);
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Something went wrong");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        }
+        if (result != null && result.equals("Yes")){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, isbn + ": This is already issued book");
+        } else {
+            try {
+                bookRepository.deleteById(isbn);
+            } catch (Exception e){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Something went wrong");
+            }
         }
     }
 
