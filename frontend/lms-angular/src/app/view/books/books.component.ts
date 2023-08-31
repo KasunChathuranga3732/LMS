@@ -142,7 +142,7 @@ export class BooksComponent {
         const index = this.bookList.findIndex(book => book.isbn == isbn);
         this.bookList.splice(index, 1);
       }, (err) => {
-        this.toastr.error(err.error, 'Error');
+        this.toastr.error(err.error.message, 'Error');
       })
   }
 }

@@ -9,10 +9,12 @@ import {
     updateMember
 } from "../repository/member-repository";
 import {Member} from "../dto/member";
-import Joi, {ValidationError} from "joi";
+import Joi, {string, ValidationError} from "joi";
+import {AxiosResponse} from "axios";
 
 export const router = express.Router();
 router.use(cors());
+const axios = require('axios');
 
 
 const memberValidator:RequestHandler = (req, res, next) =>{
@@ -68,8 +70,25 @@ router.delete('/:memberId', async (req, res) => {
         return;
     }
 
-    await deleteMemberById(req.params.memberId);
-    res.sendStatus(204);
+    let result: string = "";
+
+    await axios.get("http://localhost:8080/api/v1/issues/member/" + req.params.memberId)
+        .then((response: AxiosResponse<string>) => {
+            const responseData = response.data;
+            if (responseData === "Yes"){
+                result = "Yes";
+                res.status(409).send("The member has already received a book");
+                return;
+            }
+        })
+        .catch(function (error:any) {
+            res.status(400).send("Something went wrong");
+            return;
+        })
+    if(result !== "Yes"){
+        await deleteMemberById(req.params.memberId);
+        res.sendStatus(204);
+    }
 });
 
 
