@@ -61,8 +61,8 @@ public class IssueServiceImpl implements IssueService {
         try{
             issueRepository.save(mapper.map(issue, Issue.class));
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Internal Server Error");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
         }
     }
 
@@ -76,8 +76,8 @@ public class IssueServiceImpl implements IssueService {
         try{
             issueRepository.save(mapper.map(issue, Issue.class));
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Internal Server Error");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
         }
     }
 
@@ -91,8 +91,8 @@ public class IssueServiceImpl implements IssueService {
         try{
             issueRepository.deleteById(issue.getId());
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Internal Server Error");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
         }
 
 
@@ -104,5 +104,35 @@ public class IssueServiceImpl implements IssueService {
         return issueRepository.findIssueByIdLikeOrIsbnLikeOrMemberIdLike(query, query, query)
                 .stream().map(issue -> mapper.map(issue, IssueDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getIssueByIsbn(String isbn) {
+        try {
+            int count = issueRepository.countByIsbnAndReturned(isbn, Returned.NO);
+            if (count > 0) {
+                return "Yes";
+            } else {
+                return "No";
+            }
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
+    }
+
+    @Override
+    public String getIssueByMemberId(String id) {
+        try {
+            int count = issueRepository.findIssueByMemberIdAndReturned(id, Returned.NO).size();
+            if (count > 0) {
+                return "Yes";
+            } else {
+                return "No";
+            }
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
     }
 }

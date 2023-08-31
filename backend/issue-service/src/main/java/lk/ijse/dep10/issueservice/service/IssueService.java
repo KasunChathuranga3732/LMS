@@ -14,5 +14,8 @@ public interface IssueService {
 
     List<IssueDTO> findIssues(String query);
 
+    String getIssueByIsbn(String isbn);
+
+    String getIssueByMemberId(String id);
 
 }
