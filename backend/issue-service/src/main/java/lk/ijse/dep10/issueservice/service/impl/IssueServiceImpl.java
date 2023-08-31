@@ -48,21 +48,21 @@ public class IssueServiceImpl implements IssueService {
                     issue.getIsbn()+": This book not found.");
         }
 
-        if(book != null){
+        if(book != null) {
             int totalBooks = book.getCopies();
             int issueCount = issueRepository.countByIsbnAndReturned(book.getIsbn(), Returned.NO);
 
-            if(totalBooks <= issueCount){
+            if (totalBooks <= issueCount) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        issue.getIsbn()+": This book not available. All copies have been released.");
+                        issue.getIsbn() + ": This book not available. All copies have been released.");
             }
-        }
 
-        try{
-            issueRepository.save(mapper.map(issue, Issue.class));
-        } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Something went wrong");
+            try {
+                issueRepository.save(mapper.map(issue, Issue.class));
+            } catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Something went wrong");
+            }
         }
     }
 
@@ -100,9 +100,17 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueDTO> findIssues(String query) {
-        query = "%" + query + "%";
-        return issueRepository.findIssueByIdLikeOrIsbnLikeOrMemberIdLike(query, query, query)
-                .stream().map(issue -> mapper.map(issue, IssueDTO.class))
+        List<Issue> issueList;
+
+        try {
+            Integer id = Integer.parseInt(query);
+            issueList = issueRepository.findIssuesByIdLike(id);
+        } catch (NumberFormatException e){
+            query = "%" + query + "%";
+            issueList = issueRepository.findIssueByIsbnLikeOrMemberIdLike(query, query);
+        }
+
+        return issueList.stream().map(issue -> mapper.map(issue, IssueDTO.class))
                 .collect(Collectors.toList());
     }
 
