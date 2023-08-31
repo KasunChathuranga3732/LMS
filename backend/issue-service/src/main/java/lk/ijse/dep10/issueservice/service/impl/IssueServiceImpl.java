@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -99,6 +100,9 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueDTO> findIssues(String query) {
-        return null;
+        query = "%" + query + "%";
+        return issueRepository.findIssueByIdLikeOrIsbnLikeOrMemberIdLike(query, query, query)
+                .stream().map(issue -> mapper.map(issue, IssueDTO.class))
+                .collect(Collectors.toList());
     }
 }

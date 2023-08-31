@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IssueRepository extends JpaRepository<Issue, Integer> {
 
-    List<Issue> findIssueByIdLikeOrIsbnLikeOrMemberIdLike(int q1, String q2, String q3);
+    List<Issue> findIssueByIdLikeOrIsbnLikeOrMemberIdLike(String q1, String q2, String q3);
 
     List<Issue> findIssueByMemberIdAndReturned(String memberId, Returned returned);
 
