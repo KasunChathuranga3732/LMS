@@ -31,7 +31,12 @@ public class BookServiceImpl implements BookService {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "The isbn: " + book.getIsbn() + " already exist");
         }
-        bookRepository.save(mapper.map(book, Book.class));
+        try {
+            bookRepository.save(mapper.map(book, Book.class));
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
     }
 
     @Override
@@ -40,7 +45,13 @@ public class BookServiceImpl implements BookService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "The isbn: " + book.getIsbn() + " does not exist");
         }
-        bookRepository.save(mapper.map(book, Book.class));
+
+        try {
+            bookRepository.save(mapper.map(book, Book.class));
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
     }
 
     @Override
@@ -50,7 +61,13 @@ public class BookServiceImpl implements BookService {
                     "The isbn: " + isbn+ " does not exist");
         }
         /* Todo: Check whether the book has been issued*/
-        bookRepository.deleteById(isbn);
+
+        try {
+            bookRepository.deleteById(isbn);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
     }
 
     @Override
