@@ -10,7 +10,7 @@ public interface IssueService {
 
     void updateIssue(IssueDTO issue);
 
-    void deleteIssue(IssueDTO issue);
+    void deleteIssue(Integer id);
 
     List<IssueDTO> findIssues(String query);
 

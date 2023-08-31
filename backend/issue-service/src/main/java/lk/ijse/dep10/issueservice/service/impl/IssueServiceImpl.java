@@ -82,14 +82,14 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void deleteIssue(IssueDTO issue) {
-        if(issueRepository.existsById(issue.getId())){
+    public void deleteIssue(Integer id) {
+        if(issueRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "The issue: " + issue.getId() + " does not exist");
+                    "The issue: " + id + " does not exist");
         }
 
         try{
-            issueRepository.deleteById(issue.getId());
+            issueRepository.deleteById(id);
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Something went wrong");
