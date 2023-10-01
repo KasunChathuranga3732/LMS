@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
@@ -29,12 +30,12 @@ public class IssueDTO implements Serializable {
     @NotNull(message = "Return date can't be empty")
     private Date returnDate;
     @PositiveOrZero(message = "Fine can't be negative")
-    private double fine;
+    private BigDecimal fine;
     @NotNull(message = "Returned should be Yes or No")
     private Returned returned;
 
     public IssueDTO(String isbn, String memberId, Date issueDate,
-                    Date returnDate, double fine, Returned returned) {
+                    Date returnDate, BigDecimal fine, Returned returned) {
         this.isbn = isbn;
         this.memberId = memberId;
         this.issueDate = issueDate;

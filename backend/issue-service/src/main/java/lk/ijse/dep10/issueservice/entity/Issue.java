@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
@@ -19,17 +20,23 @@ public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(nullable = false)
     private String isbn;
+
     @Column(name = "member_id", nullable = false)
     private String memberId;
+
     @Column(name = "issue_date", nullable = false)
     private Date issueDate;
+
     @Column(name = "return_date", nullable = false)
     private Date returnDate;
-    @Column(nullable = false)
-    private double fine;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal fine;
+
+    @Column(nullable = false, length = 3)
     @Enumerated(EnumType.STRING)
-    @Column(name = "returned", nullable = false)
     private Returned returned;
 }
