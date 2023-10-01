@@ -31,4 +31,19 @@ export class IssueComponent {
       });
   }
 
+  getIssues(txtSearch: HTMLInputElement) {
+    const searchText = txtSearch.value.trim();
+    const query = (searchText) ? `?q=${searchText}`: "";
+    this.http.get<Array<Issue>>(`${this.API_BASE_URL}` + query)
+      .subscribe(issueList => {
+        if(this.return === 'All'){
+          this.issueList = issueList
+        } else {
+          this.issueList = issueList.filter(issue => issue.returned === 'NO');
+        }
+      }, (err) => {
+        this.toastr.error("Can't fetch issues: "+err.statusText, 'Error');
+      });
+  }
+
 }

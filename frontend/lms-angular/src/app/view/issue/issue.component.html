@@ -5,10 +5,10 @@
             data-bs-target="#new-issue-modal">New Issue</button>
   </section>
   <section class="p-2 form-control d-flex gap-2">
-    <input id="txt-search" class="form-control text-center" type="text" placeholder="Search Issue">
+    <input #txtSearch (input)="getIssues(txtSearch)" id="txt-search" class="form-control text-center" type="text" placeholder="Search Issue">
     <div id="sort" class="mt-2">
-      <input class="cursor-pointer" type="radio" name="return" value="All" [(ngModel)]="return"> All
-      <input class="cursor-pointer" type="radio" name="return" value="Non-Return" [(ngModel)]="return"> Non-Return
+      <input class="cursor-pointer" type="radio" name="return" value="All" [(ngModel)]="return" (click)="getIssues(txtSearch)"> All
+      <input class="cursor-pointer" type="radio" name="return" value="Non-Return" [(ngModel)]="return" (click)="getIssues(txtSearch)"> Non-Return
     </div>
   </section>
   <section class="p-2">
@@ -56,7 +56,7 @@
       </tr>
       </tbody>
       <tfoot>
-      <tr>
+      <tr *ngIf="!issueList">
         <td class="text-center" colspan="8">No issue records are found!</td>
       </tr>
       </tfoot>
