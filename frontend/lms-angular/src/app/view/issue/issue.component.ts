@@ -66,10 +66,10 @@ export class IssueComponent {
 
     const issue = new Issue(null, this.isbn, this.memberId, issueDate, dueDate, 0, 'NO');
 
-    this.http.post(`${this.API_BASE_URL_ISSUE}`, issue)
+    this.http.post<Issue>(`${this.API_BASE_URL_ISSUE}`, issue)
       .subscribe(result => {
         this.toastr.success('Successfully save the book', 'Success');
-        this.issueList.push(issue);
+        this.issueList.push(result);
 
         [txtIsbn, txtMemberId].forEach(txt => {
           txt.classList.remove('is-invalid', 'animate__shakeX');

@@ -21,8 +21,8 @@ public class IssueRestController {
 
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveIssue(@RequestBody @Validated IssueDTO issueDTO){
-        issueService.saveIssue(issueDTO);
+    public IssueDTO saveIssue(@RequestBody @Validated IssueDTO issueDTO){
+        return issueService.saveIssue(issueDTO);
     }
 
     @PatchMapping(value = "/{id}", consumes = "application/json")

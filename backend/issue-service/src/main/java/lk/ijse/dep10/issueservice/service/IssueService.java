@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IssueService {
 
-    void saveIssue(IssueDTO issue);
+    IssueDTO saveIssue(IssueDTO issue);
 
     void updateIssue(IssueDTO issue);
 

@@ -32,7 +32,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void saveIssue(IssueDTO issue) {
+    public IssueDTO saveIssue(IssueDTO issue) {
         List<Issue> list = issueRepository.findIssueByMemberIdAndReturned(issue.getMemberId(), Returned.NO);
         if(list.size() == 3){
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -56,13 +56,12 @@ public class IssueServiceImpl implements IssueService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         issue.getIsbn() + ": This book not available. All copies have been released.");
             }
-
-            try {
-                issueRepository.save(mapper.map(issue, Issue.class));
-            } catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Something went wrong");
-            }
+        }
+        try {
+            return mapper.map(issueRepository.save(mapper.map(issue, Issue.class)), IssueDTO.class);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
         }
     }
 
