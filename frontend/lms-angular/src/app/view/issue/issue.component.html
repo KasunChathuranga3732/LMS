@@ -2,7 +2,7 @@
   <section class="d-flex justify-content-between border-bottom p-2">
     <h2 class="m-0 align-self-center">Manage Issues</h2>
     <button id="btn-new-issue" class="btn btn-primary" data-bs-toggle="modal"
-            data-bs-target="#new-issue-modal">New Issue</button>
+            data-bs-target="#new-issue-modal" (click)="newIssue(txtIsbn, txtMemberId)">New Issue</button>
   </section>
   <section class="p-2 form-control d-flex gap-2">
     <input #txtSearch (input)="getIssues(txtSearch)" id="txt-search" class="form-control text-center" type="text" placeholder="Search Issue">
@@ -75,14 +75,14 @@
       <div class="modal-body text-center">
         <div class="mb-3">
           <label for="txt-Isbn" class="form-label">ISBN</label>
-          <input type="text" class="form-control text-center" id="txt-Isbn" placeholder="Eg. 5672897153961">
+          <input #txtIsbn [(ngModel)]="isbn" type="text" class="form-control text-center" id="txt-Isbn" placeholder="Eg. 5672897153961">
           <div class="invalid-feedback">
             ISBN can't be empty
           </div>
         </div>
         <div class="mb-3">
           <label for="txt-MemberId" class="form-label">Member Id</label>
-          <input type="text" class="form-control text-center" id="txt-MemberId" placeholder="Eg. 951839813V">
+          <input #txtMemberId [(ngModel)]="memberId" type="text" class="form-control text-center" id="txt-MemberId" placeholder="Eg. 951839813V">
           <div class="invalid-feedback">
             Member id can't be empty
           </div>
@@ -92,7 +92,7 @@
         <div id="loader">
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
-        <button id="btn-save" type="button" class="btn btn-primary">Issue</button>
+        <button id="btn-save" type="button" class="btn btn-primary" (click)="issueBook(txtIsbn, txtMemberId)">Issue</button>
       </div>
     </div>
   </div>
