@@ -60,6 +60,26 @@ export class IssueComponent {
       return
     }
 
+    const pipe = new DatePipe('en-US');
+    const issueDate = pipe.transform(new Date(), 'yyyy-MM-dd');
+    const dueDate = pipe.transform(new Date().setDate(new Date().getDate() + 10), 'yyyy-MM-dd');
+
+    const issue = new Issue(null, this.isbn, this.memberId, issueDate, dueDate, 0, 'NO');
+
+    this.http.post(`${this.API_BASE_URL_ISSUE}`, issue)
+      .subscribe(result => {
+        this.toastr.success('Successfully save the book', 'Success');
+        this.issueList.push(issue);
+
+        [txtIsbn, txtMemberId].forEach(txt => {
+          txt.classList.remove('is-invalid', 'animate__shakeX');
+          txt.value = '';
+        })
+
+        txtIsbn.focus();
+      }, (err) => {
+        this.toastr.error(err.error, 'Error');
+      });
   }
 
 
