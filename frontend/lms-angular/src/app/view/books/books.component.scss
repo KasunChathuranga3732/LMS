@@ -17,18 +17,24 @@ main {
   overflow-y: scroll;
 }
 
-#tbl-customers thead tr th:first-child,
-#tbl-customers thead tr td:first-child{
+#tbl-books thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+#tbl-books thead tr th:first-child,
+#tbl-books tbody tr td:first-child{
   width: 150px;
 }
 
-#tbl-customers thead tr th:last-child,
-#tbl-customers thead tr td:last-child{
+#tbl-books thead tr th:last-child,
+#tbl-books tbody tr td:last-child{
   width: 100px;
 }
 
-#tbl-customers thead tr th:nth-child(4),
-#tbl-customers thead tr td:nth-child(4){
+#tbl-books thead tr th:nth-child(4),
+#tbl-books tbody tr td:nth-child(4){
   width: 120px;
 }
 
@@ -37,7 +43,7 @@ main {
   word-wrap: break-word;
 }
 
-#tbl-customers tbody tr {
+#tbl-books tbody tr {
   cursor: pointer;
 }
 

@@ -1,16 +1,32 @@
-#tbl-customers thead tr th:first-child,
-#tbl-customers thead tr td:first-child{
+.member-table-wrapper {
+  max-height: 65vh;
+  overflow-y: scroll;
+}
+
+#tbl-members thead tr th:first-child,
+#tbl-members tbody tr td:first-child{
   width: 150px;
 }
 
-#tbl-customers thead tr th:last-child,
-#tbl-customers thead tr td:last-child{
+#tbl-members thead tr th:last-child,
+#tbl-members tbody tr td:last-child{
   width: 100px;
 }
 
-#tbl-customers thead tr th:nth-child(4),
-#tbl-customers thead tr td:nth-child(4){
+#tbl-members thead tr th:nth-child(4),
+#tbl-members tbody tr td:nth-child(4){
   width: 250px;
+}
+
+#tbl-members {
+  width: 100%;
+  table-layout: fixed;
+}
+
+#tbl-members thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .contact {
@@ -18,7 +34,7 @@
   word-wrap: break-word;
 }
 
-#tbl-customers tbody tr {
+#tbl-members tbody tr {
   cursor: pointer;
 }
 
