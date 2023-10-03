@@ -1,6 +1,6 @@
-#tbl-issue {
-  width: 100%;
-  table-layout: fixed;
+.issue-table-wrapper {
+  max-height: 65vh;
+  overflow-y: scroll;
 }
 
 #tbl-issue thead {
