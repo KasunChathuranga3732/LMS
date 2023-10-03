@@ -188,4 +188,15 @@ export class IssueComponent {
       this.toastr.error('Something went wrong', 'Error');
     }
   }
+
+  deleteIssue(id: number | null) {
+    this.http.delete(`${this.API_BASE_URL_ISSUE}/${id}`)
+      .subscribe(result => {
+        this.toastr.success('Successfully delete the issue', 'Success');
+        const index = this.issueList.findIndex(issue => issue.id == id);
+        this.issueList.splice(index, 1);
+      }, (err) => {
+        this.toastr.error(err.error.message, 'Error');
+      })
+  }
 }
