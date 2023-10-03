@@ -64,22 +64,24 @@ export class IssueComponent {
     const issueDate = pipe.transform(new Date(), 'yyyy-MM-dd');
     const dueDate = pipe.transform(new Date().setDate(new Date().getDate() + 10), 'yyyy-MM-dd');
 
-    const issue = new Issue(null, this.isbn, this.memberId, issueDate, dueDate, 0, 'NO');
+    if(issueDate && dueDate) {
+      const issue = new Issue(null, this.isbn, this.memberId, issueDate, dueDate, 0, 'NO');
 
-    this.http.post<Issue>(`${this.API_BASE_URL_ISSUE}`, issue)
-      .subscribe(result => {
-        this.toastr.success('Successfully save the book', 'Success');
-        this.issueList.push(result);
+      this.http.post<Issue>(`${this.API_BASE_URL_ISSUE}`, issue)
+        .subscribe(result => {
+          this.toastr.success('Successfully issue the book', 'Success');
+          this.issueList.push(result);
 
-        [txtIsbn, txtMemberId].forEach(txt => {
-          txt.classList.remove('is-invalid', 'animate__shakeX');
-          txt.value = '';
-        })
+          [txtIsbn, txtMemberId].forEach(txt => {
+            txt.classList.remove('is-invalid', 'animate__shakeX');
+            txt.value = '';
+          })
 
-        txtIsbn.focus();
-      }, (err) => {
-        this.toastr.error(err.error, 'Error');
-      });
+          txtIsbn.focus();
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
+        });
+    }
   }
 
 
@@ -119,5 +121,71 @@ export class IssueComponent {
     txt.select();
     $(txt).next().text(msg);
     return false;
+  }
+
+  updateIssue(issue: Issue, u_id: HTMLInputElement, u_isbn: HTMLInputElement, u_memberId: HTMLInputElement,
+              u_issueDate: HTMLInputElement, u_dueDate: HTMLInputElement, u_fine: HTMLInputElement) {
+    if(issue.id){
+      u_id.value = '' + issue.id;
+    }
+    u_isbn.value = issue.isbn;
+    u_memberId.value = issue.memberId;
+    u_issueDate.value = issue.issueDate;
+    u_dueDate.value = issue.returnDate;
+
+    const difference = new Date().getTime() - new Date(issue.issueDate).getTime();
+    const days = Math.floor(difference/(1000 * 3600 * 24));
+
+    if(days > 10){
+      const cost = (days - 10) * 10;
+      u_fine.value = '' + cost.toFixed(2);
+    } else {
+      u_fine.value = '0.00';
+    }
+  }
+
+  returnBook(u_id: HTMLInputElement, u_fine: HTMLInputElement, inputs: HTMLInputElement[]) {
+    inputs.push(u_id);
+    inputs.push(u_fine);
+
+    let valid = true;
+
+    inputs.forEach(txt => {
+      if(!txt.value) {
+        valid = false;
+      }
+    })
+
+    if(!valid){
+      return
+    }
+
+    const issue = this.issueList.find(issue => +u_id.value === issue.id);
+    const fine = +u_fine.value;
+
+    const pipe = new DatePipe('en-US');
+    const today = pipe.transform(new Date(), 'yyyy-MM-dd');
+
+    if(issue && today){
+      issue.returned = 'YES';
+      issue.fine = fine;
+      issue.returnDate = today;
+
+      this.http.patch(`${this.API_BASE_URL_ISSUE}/`+ u_id.value, issue)
+        .subscribe(result => {
+          this.toastr.success('Successfully return the book', 'Success');
+          const index = this.issueList.findIndex(issue1 => issue.id === issue1.id);
+          this.issueList.splice(index, 1, issue);
+
+          inputs.forEach(txt => {
+            txt.value = '';
+          })
+
+        }, (err) => {
+          this.toastr.error(err.error, 'Error');
+        })
+    } else {
+      this.toastr.error('Something went wrong', 'Error');
+    }
   }
 }

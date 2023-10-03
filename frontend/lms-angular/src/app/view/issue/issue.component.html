@@ -19,7 +19,7 @@
         <th class="text-center">ISBN</th>
         <th class="text-center">Member Id</th>
         <th class="text-center">Issue Date</th>
-        <th class="text-center">Due Date</th>
+        <th class="text-center">Due/Return Date</th>
         <th class="text-center">Fine (LKR)</th>
         <th class="text-center">Returned</th>
         <th></th>
@@ -36,7 +36,7 @@
         <td class="text-center">{{issue.returned}}</td>
         <td>
           <div class="actions d-flex gap-3 justify-content-center">
-            <div data-bs-toggle="modal" data-bs-target="#update-issue-modal" title="Return Book">
+            <div *ngIf="issue.returned === 'NO'" (click)="updateIssue(issue, u_id, u_isbn, u_memberId, u_issueDate, u_dueDate, u_fine)" data-bs-toggle="modal" data-bs-target="#update-issue-modal" title="Return Book">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
                 <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -74,14 +74,14 @@
       </div>
       <div class="modal-body text-center">
         <div class="mb-3">
-          <label for="txt-Isbn" class="form-label">ISBN</label>
+          <label for="txt-Isbn" class="form-label font-color-gray">ISBN</label>
           <input #txtIsbn [(ngModel)]="isbn" type="text" class="form-control text-center" id="txt-Isbn" placeholder="Eg. 5672897153961">
           <div class="invalid-feedback">
             ISBN can't be empty
           </div>
         </div>
         <div class="mb-3">
-          <label for="txt-MemberId" class="form-label">Member Id</label>
+          <label for="txt-MemberId" class="form-label font-color-gray">Member Id</label>
           <input #txtMemberId [(ngModel)]="memberId" type="text" class="form-control text-center" id="txt-MemberId" placeholder="Eg. 951839813V">
           <div class="invalid-feedback">
             Member id can't be empty
@@ -107,32 +107,33 @@
         <button id="btnClose1" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
+        <input #u_id hidden="hidden">
         <div class="mb-3">
-          <label for="txt-isbn2" class="form-label">ISBN</label>
-          <input type="text" class="form-control text-center" id="txt-isbn2">
+          <label for="txt-isbn2" class="form-label font-color-gray">ISBN</label>
+          <input #u_isbn type="text" class="form-control text-center" id="txt-isbn2" disabled>
         </div>
         <div class="mb-3">
-          <label for="txt-memberId2" class="form-label">Member Id</label>
-          <input type="text" class="form-control text-center" id="txt-memberId2">
+          <label for="txt-memberId2" class="form-label font-color-gray">Member Id</label>
+          <input #u_memberId type="text" class="form-control text-center" id="txt-memberId2" disabled>
         </div>
         <div class="mb-3">
-          <label for="txt-issue-date" class="form-label">Issue Date</label>
-          <input type="text" class="form-control text-center" id="txt-issue-date">
+          <label for="txt-issue-date" class="form-label font-color-gray">Issue Date</label>
+          <input #u_issueDate type="text" class="form-control text-center" id="txt-issue-date" disabled>
         </div>
         <div class="mb-3">
-          <label for="txt-due-date" class="form-label">Due Date</label>
-          <input type="text" class="form-control text-center" id="txt-due-date">
+          <label for="txt-due-date" class="form-label font-color-gray">Due Date</label>
+          <input #u_dueDate type="text" class="form-control text-center" id="txt-due-date" disabled>
         </div>
         <div class="mb-3">
-          <label for="txt-fine" class="form-label">Fine</label>
-          <input type="text" class="form-control text-center" id="txt-fine">
+          <label for="txt-fine" class="form-label font-color-gray">Fine</label>
+          <input #u_fine type="text" class="form-control text-center" id="txt-fine" disabled>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <div id="update_loader">
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
-        <button id="btn-update" type="button" class="btn btn-primary">Return</button>
+        <button (click)="returnBook(u_id, u_fine, [u_isbn, u_memberId, u_issueDate, u_dueDate])" id="btn-update" type="button" class="btn btn-primary">Return</button>
       </div>
     </div>
   </div>

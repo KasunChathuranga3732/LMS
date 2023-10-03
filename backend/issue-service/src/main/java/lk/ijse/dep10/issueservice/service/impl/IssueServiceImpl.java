@@ -67,7 +67,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void updateIssue(IssueDTO issue) {
-        if(issueRepository.existsById(issue.getId())){
+        if(!issueRepository.existsById(issue.getId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "The issue: " + issue.getId() + " does not exist");
         }
@@ -82,7 +82,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void deleteIssue(Integer id) {
-        if(issueRepository.existsById(id)){
+        if(!issueRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "The issue: " + id + " does not exist");
         }
