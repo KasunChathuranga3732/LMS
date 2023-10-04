@@ -55,10 +55,18 @@ export class HomeComponent {
       .subscribe(issueList => {
         this.issueList = issueList;
         this.totalIssues = '' + issueList.length
+        this.getTotalFines();
       }, (err) => {
-        this.toastr.error("Can't fetch members: " + err.statusText, 'Error');
+        this.toastr.error("Can't fetch issues: " + err.statusText, 'Error');
       })
   }
 
 
+  private getTotalFines() {
+    let total = 0;
+    this.issueList.forEach(issue => {
+      total += issue.fine;
+    })
+    this.totalFines = '' + total;
+  }
 }
