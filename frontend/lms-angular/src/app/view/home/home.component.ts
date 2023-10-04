@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 import {Member} from "../../dto/member";
+import {Book} from "../../dto/book";
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ export class HomeComponent {
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
     this.getMembers()
+    this.getBooks()
   }
 
   getMembers(){
@@ -29,6 +31,19 @@ export class HomeComponent {
         this.totalMembers = '' + memberList.length
       }, (err) => {
         this.toastr.error("Can't fetch members: " + err.statusText, 'Error');
+      })
+  }
+
+  getBooks(){
+    this.http.get<Array<Book>>(`${this.API_BASE_URL_BOOK}`)
+      .subscribe(bookList => {
+        let count = 0;
+        bookList.forEach(book =>{
+          count += book.copies
+        })
+        this.totalBooks = '' + count;
+      }, (err) => {
+        this.toastr.error("Can't fetch books: " + err.statusText, 'Error');
       })
   }
 
