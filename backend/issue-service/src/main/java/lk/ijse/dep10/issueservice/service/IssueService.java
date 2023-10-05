@@ -18,4 +18,6 @@ public interface IssueService {
 
     String getIssueByMemberId(String id);
 
+    Integer getCountNonReturnsCopies(String isbn);
+
 }

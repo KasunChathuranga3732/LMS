@@ -142,4 +142,14 @@ public class IssueServiceImpl implements IssueService {
                     "Something went wrong");
         }
     }
+
+    @Override
+    public Integer getCountNonReturnsCopies(String isbn) {
+        try {
+            return issueRepository.countByIsbnAndReturned(isbn, Returned.NO);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Something went wrong");
+        }
+    }
 }

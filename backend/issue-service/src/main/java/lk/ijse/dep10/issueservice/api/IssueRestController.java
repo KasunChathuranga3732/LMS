@@ -49,6 +49,11 @@ public class IssueRestController {
         return issueService.getIssueByIsbn(isbn);
     }
 
+    @GetMapping("/book/return/{isbn}")
+    public Integer getCountNonReturnBooksByIsbn(@PathVariable String isbn){
+        return issueService.getCountNonReturnsCopies(isbn);
+    }
+
     @GetMapping("/member/{id}")
     public String getIssuesByMember(@PathVariable String id){
         return issueService.getIssueByMemberId(id);
