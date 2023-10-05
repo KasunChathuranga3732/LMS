@@ -4,6 +4,7 @@ import {ToastrService} from "ngx-toastr";
 import {Member} from "../../dto/member";
 import {Book} from "../../dto/book";
 import {Issue} from "../../dto/issue";
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ export class HomeComponent {
   totalFines: string = '';
   availableBooks: string = '';
   issuedBooks: string = '';
+  memberAvailable: string = '';
   totalBookCount: number = 0;
   issueList: Array<Issue> = [];
   API_BASE_URL_ISSUE: string = 'http://localhost:8080/api/v1/issues';
@@ -81,5 +83,32 @@ export class HomeComponent {
 
   private getAvailableBooks(issueCount: number) {
     this.availableBooks = '' + (this.totalBookCount - issueCount);
+  }
+
+  checkMember(txtId: HTMLInputElement, memberLabel: HTMLDivElement) {
+    const id = txtId.value;
+
+    txtId.classList.remove('is-invalid', 'animate__shakeX');
+
+    if(!id){
+      this.invalidate(txtId, "Member id can't be empty");
+      return;
+    } else if (!/^\d{9}[Vv]$/.test(id)){
+      this.invalidate(txtId, "Invalid member id");
+      return;
+    } else {
+      this.http.get<Member>(`${this.API_BASE_URL_MEMBER}/` + id)
+        .subscribe(result =>{
+          memberLabel.innerText = 'Available';
+        }, (err) => {
+          memberLabel.innerText = err.statusText;
+        });
+    }
+  }
+
+  private invalidate(txt: HTMLInputElement, msg: string) {
+    setTimeout(()=>txt.classList.add('is-invalid', 'animate__shakeX'),0);
+    txt.select();
+    $(txt).next().text(msg);
   }
 }

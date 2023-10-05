@@ -90,22 +90,22 @@
         <button class="btn btn-primary mb-2">Find</button>
         <button class="btn btn-secondary mb-2 mx-2" (click)="txtIsbn.value=''; bookLabel.innerText=''">Clear</button>
       </div>
-      <div #bookLabel>e</div>
+      <div #bookLabel></div>
     </div>
     <div id="member" class="text-center border-bottom p-2 m-2 mt-5 rounded-3">
       <div class="fs-5">Member Availability</div>
       <div class="mb-3 text-center">
         <label for="txt-mid" class="form-label">Member Id</label>
-        <input #txtId type="text" class="form-control text-center" id="txt-mid" placeholder="Eg. 982761856V">
+        <input #txtId (focus)="memberLabel.innerText = ''" type="text" class="form-control text-center" id="txt-mid" placeholder="Eg. 982761856V">
         <div class="invalid-feedback">
           Id can't be empty
         </div>
       </div>
       <div>
-        <button class="btn btn-primary mb-2">Find</button>
+        <button class="btn btn-primary mb-2" (click)="checkMember(txtId, memberLabel)">Find</button>
         <button class="btn btn-secondary mb-2 mx-2" (click)="txtId.value=''; memberLabel.innerText=''">Clear</button>
       </div>
-      <div #memberLabel>e</div>
+      <div #memberLabel></div>
     </div>
   </section>
 </main>
