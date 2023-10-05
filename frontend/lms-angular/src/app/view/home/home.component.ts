@@ -21,6 +21,7 @@ export class HomeComponent {
   memberAvailable: string = '';
   totalBookCount: number = 0;
   issueList: Array<Issue> = [];
+  bookList: Array<Book> = [];
   API_BASE_URL_ISSUE: string = 'http://localhost:8080/api/v1/issues';
   API_BASE_URL_BOOK: string = 'http://localhost:8080/api/v1/books';
   API_BASE_URL_MEMBER: string = 'http://localhost:8080/api/v1/members';
@@ -43,6 +44,7 @@ export class HomeComponent {
   getBooks(){
     this.http.get<Array<Book>>(`${this.API_BASE_URL_BOOK}`)
       .subscribe(bookList => {
+        this.bookList = bookList;
         let count = 0;
         bookList.forEach(book =>{
           count += book.copies
@@ -110,5 +112,41 @@ export class HomeComponent {
     setTimeout(()=>txt.classList.add('is-invalid', 'animate__shakeX'),0);
     txt.select();
     $(txt).next().text(msg);
+  }
+
+  bookAvailable(txtIsbn: HTMLInputElement, bookLabel: HTMLDivElement) {
+    const isbn = txtIsbn.value;
+
+    txtIsbn.classList.remove('is-invalid', 'animate__shakeX');
+
+    if(!isbn){
+      this.invalidate(txtIsbn, "ISBN can't be empty");
+      return;
+    } else if (!/^\d{13}$/.test(isbn)) {
+      this.invalidate(txtIsbn, "Invalid ISBN");
+      return;
+    } else {
+      const book1 = this.bookList.find(book => book.isbn == isbn);
+      if(!book1){
+        bookLabel.innerText = "Doesn't exist";
+        return;
+      }
+
+      let totalCount = 0;
+
+      this.http.get<Book>(`${this.API_BASE_URL_BOOK}/` + isbn)
+        .subscribe(result =>{
+          totalCount = result.copies;
+        });
+
+      this.http.get<number>(`${this.API_BASE_URL_ISSUE}/book/return/` + isbn)
+        .subscribe(result => {
+          if(totalCount > result ){
+            bookLabel.innerText = "Available";
+          } else {
+            bookLabel.innerText = "Not Available";
+          }
+        })
+    }
   }
 }

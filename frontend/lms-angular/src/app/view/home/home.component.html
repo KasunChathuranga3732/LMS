@@ -87,7 +87,7 @@
         </div>
       </div>
       <div>
-        <button class="btn btn-primary mb-2">Find</button>
+        <button class="btn btn-primary mb-2" (click)="bookAvailable(txtIsbn, bookLabel)">Find</button>
         <button class="btn btn-secondary mb-2 mx-2" (click)="txtIsbn.value=''; bookLabel.innerText=''">Clear</button>
       </div>
       <div #bookLabel></div>
