@@ -17,6 +17,7 @@ export class HomeComponent {
   totalFines: string = '';
   availableBooks: string = '';
   issuedBooks: string = '';
+  totalBookCount: number = 0;
   issueList: Array<Issue> = [];
   API_BASE_URL_ISSUE: string = 'http://localhost:8080/api/v1/issues';
   API_BASE_URL_BOOK: string = 'http://localhost:8080/api/v1/books';
@@ -44,6 +45,7 @@ export class HomeComponent {
         bookList.forEach(book =>{
           count += book.copies
         })
+        this.totalBookCount = count;
         this.totalBooks = '' + count;
       }, (err) => {
         this.toastr.error("Can't fetch books: " + err.statusText, 'Error');
@@ -74,5 +76,10 @@ export class HomeComponent {
   private getIssuedBooks() {
     const issues = this.issueList.filter(issue => issue.returned === 'NO');
     this.issuedBooks = '' + issues.length;
+    this.getAvailableBooks(issues.length);
+  }
+
+  private getAvailableBooks(issueCount: number) {
+    this.availableBooks = '' + (this.totalBookCount - issueCount);
   }
 }
