@@ -56,6 +56,7 @@ export class HomeComponent {
         this.issueList = issueList;
         this.totalIssues = '' + issueList.length
         this.getTotalFines();
+        this.getIssuedBooks();
       }, (err) => {
         this.toastr.error("Can't fetch issues: " + err.statusText, 'Error');
       })
@@ -68,5 +69,10 @@ export class HomeComponent {
       total += issue.fine;
     })
     this.totalFines = '' + total;
+  }
+
+  private getIssuedBooks() {
+    const issues = this.issueList.filter(issue => issue.returned === 'NO');
+    this.issuedBooks = '' + issues.length;
   }
 }

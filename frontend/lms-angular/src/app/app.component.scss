@@ -11,13 +11,18 @@
   height: 83.5vh;
 }
 
-#menu .btn {
+#menu > nav > .btn {
   width: 170px;
   font-size: 1.5rem;
   padding: 5px;
   margin-left: 10px;
+  cursor: pointer;
   transition-duration: 300ms;
   transition-property: all;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 #menu .btn:hover {
