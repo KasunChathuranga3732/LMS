@@ -88,7 +88,7 @@
       </div>
       <div>
         <button class="btn btn-primary mb-2" (click)="bookAvailable(txtIsbn, bookLabel)">Find</button>
-        <button class="btn btn-secondary mb-2 mx-2" (click)="txtIsbn.value=''; bookLabel.innerText=''">Clear</button>
+        <button class="btn btn-secondary mb-2 mx-2" (click)="txtIsbn.value=''; bookLabel.innerText=''; txtIsbn.classList.remove('is-invalid', 'animate__shakeX')">Clear</button>
       </div>
       <div #bookLabel></div>
     </div>
@@ -103,7 +103,7 @@
       </div>
       <div>
         <button class="btn btn-primary mb-2" (click)="checkMember(txtId, memberLabel)">Find</button>
-        <button class="btn btn-secondary mb-2 mx-2" (click)="txtId.value=''; memberLabel.innerText=''">Clear</button>
+        <button class="btn btn-secondary mb-2 mx-2" (click)="txtId.value=''; memberLabel.innerText=''; txtId.classList.remove('is-invalid', 'animate__shakeX')">Clear</button>
       </div>
       <div #memberLabel></div>
     </div>

@@ -45,6 +45,7 @@ export class BooksComponent {
     this.btnText = 'Save Book';
     this.modelTitle = 'Add New Book';
     txtIsbn.removeAttribute('disabled');
+    [this.isbn, this.title, this.author, this.copies].forEach(txt => txt = '');
     this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
     setTimeout(()=>txtIsbn.focus(),500);
   }
@@ -73,7 +74,7 @@ export class BooksComponent {
           this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
           txtIsbn.focus();
         }, (err) => {
-          this.toastr.error(err.error, 'Error');
+          // this.toastr.error(err.error, 'Error');
         })
     } else {
       this.http.patch(`${this.API_BASE_URL}/${this.isbn}`, book)
@@ -91,24 +92,28 @@ export class BooksComponent {
   private validateData(txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement,
                        txtCopies: HTMLInputElement) {
     let valid = true;
+    const isbn = txtIsbn.value.trim();
+    const title = txtTitle.value.trim();
+    const author = txtAuthor.value.trim();
+    const copies = txtCopies.value.trim();
     this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, false);
 
-    if(!this.copies){
+    if(!copies){
       valid = this.invalidate(txtCopies, "Copies can't be empty");
-    } else if(!/^\d+$/.test(this.copies)){
+    } else if(!/^\d+$/.test(copies)){
       valid = this.invalidate(txtCopies, "Copies should be positive integer");
     }
-    if(!this.author){
+    if(!author){
       valid = this.invalidate(txtAuthor, "Author can't be empty");
     }
 
-    if(!this.title){
+    if(!title){
       valid = this.invalidate(txtTitle, "Title can't be empty");
     }
 
-    if(!this.isbn){
+    if(!isbn){
       valid = this.invalidate(txtIsbn, "ISBN can't be empty");
-    } else if(!/^\d{13}$/.test(this.isbn)){
+    } else if(!/^\d{13}$/.test(isbn)){
       valid = this.invalidate(txtIsbn, "Invalid isbn");
     }
 
@@ -125,10 +130,10 @@ export class BooksComponent {
   updateBook(book: Book, txtIsbn: HTMLInputElement, txtTitle: HTMLInputElement, txtAuthor: HTMLInputElement, txtCopies: HTMLInputElement) {
     $('btn-new-book').trigger;
     this.resetForm(txtIsbn, txtTitle, txtAuthor, txtCopies, true);
-    this.isbn = book.isbn;
-    this.title = book.title;
-    this.author = book.author;
-    this.copies = ''+book.copies;
+    txtIsbn.value = book.isbn;
+    txtTitle.value = book.title;
+    txtAuthor.value = book.author;
+    txtCopies.value = ''+book.copies;
     this.btnText = 'Update Book';
     this.modelTitle = 'Update the Book';
     txtIsbn.setAttribute('disabled', 'true');

@@ -95,13 +95,16 @@ export class IssueComponent {
             txt.classList.remove('is-invalid', 'animate__shakeX');
             txt.value = '';
           })
-
+          divs[0].innerText = '';
+          divs[1].innerText = '';
           txtIsbn.focus();
         }, (err) => {
           this.toastr.error(err.error.message, 'Error');
           [txtIsbn, txtMemberId].forEach(txt => {
             txt.classList.remove('is-invalid', 'animate__shakeX');
             txt.value = '';
+            divs[0].innerText = '';
+            divs[1].innerText = '';
           });
           txtIsbn.focus();
         });

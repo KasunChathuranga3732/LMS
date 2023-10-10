@@ -80,7 +80,7 @@ export class HomeComponent {
   private getIssuedBooks() {
     const issues = this.issueList.filter(issue => issue.returned === 'NO');
     this.issuedBooks = '' + issues.length;
-    this.getAvailableBooks(issues.length);
+    setTimeout(() => this.getAvailableBooks(issues.length), 10);
   }
 
   private getAvailableBooks(issueCount: number) {
