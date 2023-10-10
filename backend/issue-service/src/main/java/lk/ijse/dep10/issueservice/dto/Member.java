@@ -1,4 +1,4 @@
-package lk.ijse.dep10.issueservice.entity;
+package lk.ijse.dep10.issueservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Book implements Serializable {
-    private String isbn;
-    private String title;
-    private String author;
-    private int copies;
+public class Member implements Serializable {
+    private String _id;
+    private String name;
+    private String address;
+    private String contact;
 }

@@ -77,16 +77,20 @@
       <div class="modal-body text-center">
         <div class="mb-3">
           <label for="txt-Isbn" class="form-label font-color-gray">ISBN</label>
-          <input #txtIsbn [(ngModel)]="isbn" type="text" class="form-control text-center" id="txt-Isbn" placeholder="Eg. 5672897153961">
+          <input #txtIsbn [(ngModel)]="isbn" (input)="checkBook(txtIsbn, validFeedback1)" type="text" class="form-control text-center" id="txt-Isbn" placeholder="Eg. 5672897153961">
           <div class="invalid-feedback">
             ISBN can't be empty
+          </div>
+          <div class="font-color-gray" #validFeedback1>
           </div>
         </div>
         <div class="mb-3">
           <label for="txt-MemberId" class="form-label font-color-gray">Member Id</label>
-          <input #txtMemberId [(ngModel)]="memberId" type="text" class="form-control text-center" id="txt-MemberId" placeholder="Eg. 951839813V">
+          <input #txtMemberId [(ngModel)]="memberId" (input)="checkMember(txtMemberId, validFeedback2)" type="text" class="form-control text-center" id="txt-MemberId" placeholder="Eg. 951839813V">
           <div class="invalid-feedback">
             Member id can't be empty
+          </div>
+          <div class="font-color-gray" #validFeedback2>
           </div>
         </div>
       </div>
@@ -94,7 +98,7 @@
         <div id="loader">
           <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
-        <button id="btn-save" type="button" class="btn btn-primary" (click)="issueBook(txtIsbn, txtMemberId)">Issue</button>
+        <button id="btn-save" type="button" class="btn btn-primary" (click)="issueBook(txtIsbn, txtMemberId, [validFeedback1, validFeedback2])">Issue</button>
       </div>
     </div>
   </div>

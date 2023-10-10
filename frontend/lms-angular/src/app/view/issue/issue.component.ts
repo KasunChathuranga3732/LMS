@@ -3,8 +3,8 @@ import {Issue} from "../../dto/issue";
 import {DatePipe} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
-import {Book} from "../../dto/book";
 import * as $ from "jquery";
+import {Book} from "../../dto/book";
 import {Member} from "../../dto/member";
 
 @Component({
@@ -14,6 +14,8 @@ import {Member} from "../../dto/member";
 })
 export class IssueComponent {
   issueList: Array<Issue> = [];
+  bookList: Array<Book> = [];
+  memberList: Array<Member> = [];
   API_BASE_URL_ISSUE: string = 'http://localhost:8080/api/v1/issues';
   API_BASE_URL_BOOK: string = 'http://localhost:8080/api/v1/books';
   API_BASE_URL_MEMBER: string = 'http://localhost:8080/api/v1/members';
@@ -21,6 +23,8 @@ export class IssueComponent {
   id =  null;
   isbn: string = '';
   memberId: string = '';
+  bookAvailable: boolean = false;
+  memberAvailable: boolean = false;
 
   constructor(private http:HttpClient, private toastr: ToastrService) {
     http.get<Array<Issue>>(`${this.API_BASE_URL_ISSUE}`)
@@ -29,6 +33,12 @@ export class IssueComponent {
       }, (err) => {
         this.toastr.error("Can't fetch issues: " + err.statusText, 'Error');
       });
+
+    http.get<Array<Book>>(`${this.API_BASE_URL_BOOK}`)
+      .subscribe(bookList => this.bookList = bookList);
+
+    http.get<Array<Member>>(`${this.API_BASE_URL_MEMBER}`)
+      .subscribe(memberList => this.memberList = memberList);
   }
 
   getIssues(txtSearch: HTMLInputElement) {
@@ -55,9 +65,18 @@ export class IssueComponent {
     setTimeout(()=>txtIsbn.focus(),500);
   }
 
-  issueBook(txtIsbn: HTMLInputElement, txtMemberId: HTMLInputElement) {
+  issueBook(txtIsbn: HTMLInputElement, txtMemberId: HTMLInputElement, divs: HTMLDivElement[]) {
     if(!this.validData(txtIsbn, txtMemberId)){
       return
+    }
+
+    if(!this.bookAvailable || !this.memberAvailable){
+      this.toastr.error("Enter correct details", 'Error');
+      txtIsbn.value = '';
+      txtMemberId.value = '';
+      divs[0].innerText = '';
+      divs[1].innerText = '';
+      return;
     }
 
     const pipe = new DatePipe('en-US');
@@ -80,6 +99,11 @@ export class IssueComponent {
           txtIsbn.focus();
         }, (err) => {
           this.toastr.error(err.error.message, 'Error');
+          [txtIsbn, txtMemberId].forEach(txt => {
+            txt.classList.remove('is-invalid', 'animate__shakeX');
+            txt.value = '';
+          });
+          txtIsbn.focus();
         });
     }
   }
@@ -92,27 +116,18 @@ export class IssueComponent {
       txt.classList.remove('is-invalid', 'animate__shakeX');
     })
 
-    if(!this.isbn){
-      valid = this.invalidate(txtIsbn, "ISBN can't be empty");
-    } else {
-      this.http.get<Book>(`${this.API_BASE_URL_BOOK}/` + this.isbn)
-        .subscribe(book => {
-          const book1 = book;
-        }, (err) => {
-          valid = this.invalidate(txtIsbn, this.isbn + " :This book doesn't exist");
-        });
-    }
-
     if(!this.memberId){
       valid = this.invalidate(txtMemberId, "Member id can't be empty");
-    } else {
-      this.http.get<Member>(`${this.API_BASE_URL_MEMBER}/` + this.memberId)
-        .subscribe(member => {
-          const member1 = member;
-        }, (err) => {
-          valid = this.invalidate(txtMemberId, this.memberId + " :This member doesn't exist");
-        });
+    } else if(!/^\d{9}[V]$/.test(this.memberId)) {
+      valid = this.invalidate(txtMemberId, "Invalid Member id");
     }
+
+    if(!this.isbn){
+      valid = this.invalidate(txtIsbn, "ISBN can't be empty");
+    } else if(!/^\d{13}$/.test(this.isbn)){
+      valid = this.invalidate(txtIsbn, "Invalid ISBN");
+    }
+
     return valid;
   }
 
@@ -122,6 +137,44 @@ export class IssueComponent {
     $(txt).next().text(msg);
     return false;
   }
+
+
+  checkBook(txtIsbn: HTMLInputElement, validFeedback1: HTMLDivElement) {
+    txtIsbn.classList.remove('is-invalid', 'animate__shakeX');
+    validFeedback1.innerText = '';
+    this.bookAvailable = false;
+    const isbn = txtIsbn.value;
+
+    if(/^\d{13}$/.test(isbn)){
+      const book1 = this.bookList.find(book => book.isbn === isbn);
+      if(book1){
+        validFeedback1.innerText = 'Available';
+        this.bookAvailable = true;
+      } else {
+        validFeedback1.innerText = 'Not-Available';
+        this.bookAvailable = false;
+      }
+    }
+  }
+
+  checkMember(txtMemberId: HTMLInputElement, validFeedback2: HTMLDivElement) {
+    txtMemberId.classList.remove('is-invalid', 'animate__shakeX');
+    validFeedback2.innerText = '';
+    this.memberAvailable = false;
+    const id = txtMemberId.value;
+
+    if(/^\d{9}[Vv]$/.test(id)){
+      const member1 = this.memberList.find(member => member._id === id);
+      if(member1){
+        validFeedback2.innerText = 'Available';
+        this.memberAvailable = true;
+      } else {
+        validFeedback2.innerText = 'Not-Available';
+        this.memberAvailable = false;
+      }
+    }
+  }
+
 
   updateIssue(issue: Issue, u_id: HTMLInputElement, u_isbn: HTMLInputElement, u_memberId: HTMLInputElement,
               u_issueDate: HTMLInputElement, u_dueDate: HTMLInputElement, u_fine: HTMLInputElement) {

@@ -1,7 +1,8 @@
 package lk.ijse.dep10.issueservice.service.impl;
 
 import lk.ijse.dep10.issueservice.dto.IssueDTO;
-import lk.ijse.dep10.issueservice.entity.Book;
+import lk.ijse.dep10.issueservice.dto.Book;
+import lk.ijse.dep10.issueservice.dto.Member;
 import lk.ijse.dep10.issueservice.entity.Issue;
 import lk.ijse.dep10.issueservice.repository.IssueRepository;
 import lk.ijse.dep10.issueservice.service.IssueService;
@@ -46,6 +47,13 @@ public class IssueServiceImpl implements IssueService {
         } catch (HttpClientErrorException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     issue.getIsbn()+": This book not found.");
+        }
+
+        try {
+            Member member = restTemplate.getForObject("http://localhost:8080/api/v1/members/" + issue.getMemberId(), Member.class);
+        } catch (HttpClientErrorException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    issue.getMemberId()+": This member not found.");
         }
 
         if(book != null) {
